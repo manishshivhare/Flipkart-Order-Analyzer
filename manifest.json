@@ -1,0 +1,27 @@
+{
+    "name": "Flipkart Order Analyzer",
+    "description": "Flipkart Order Analyzer.",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "action": {
+        "default_popup": "./index.html",
+        "default_icon": "logo.png"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "http://www.flipkart.com/*", "https://www.flipkart.com/*"
+            ],
+            "js": [
+                "./contentScript.js"
+            ]
+        }
+    ],
+    "permissions": [
+        "tabs",
+        "storage"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ]
+}
