@@ -8,15 +8,8 @@ window.addEventListener('DOMContentLoaded', () => {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         const tab = tabs[0]
 
-        if (tab.url === undefined || tab.url.indexOf('chrome') == 0) {
-            buttonCont.innerHTML = 'can\'t access <i>Chrome pages</i>'
-        }
         
-        else if (tab.url.indexOf('file') === 0) {
-            buttonCont.innerHTML = '<span style="font-family: lobster, sans-serif">Eye Dropper</span> can\'t access <i>local pages</i>'
-
-        } 
-        else if(tab.url.includes('flipkart') && tab.url.includes('orders') ){
+        if(tab.url.includes('flipkart') && tab.url.includes('orders') ){
             const button = document.createElement("button")
             button.setAttribute("class", "analyze_btn")
 
@@ -40,7 +33,12 @@ window.addEventListener('DOMContentLoaded', () => {
             
         }
         else{
-            buttonCont.innerHTML = 'Open flipkart order section'
+            const errorMsg = document.createElement("h1")
+            errorMsg.innerText = 'First please Open flipkart orders section'
+            errorMsg.setAttribute("id", "errorMsg")
+            buttonCont.appendChild(errorMsg) 
+            document.getElementById("subCont").style.display = "none";
+            
         }
     });
 
@@ -64,6 +62,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 window.close()
             })
             clearButton.appendChild(ClearButton)
+            document.getElementById("subCont").style.display = "block";
             
             
         }
