@@ -9,7 +9,10 @@ chrome.runtime.onMessage.addListener((message, sender) => {
 
 
             var totalDeliveredVlaue = 0;
-            var countDeliveredOrder = 0;
+            var cancelledOrder = 0;
+            var returnedOrder = 0;
+            var DeliveredOrder = 0;
+            var totalOrder ;
             var elementsStatusArray = Array.from(
                 document.getElementsByClassName("g1SRZp")
             );
@@ -21,10 +24,16 @@ chrome.runtime.onMessage.addListener((message, sender) => {
 
             for (var i = 0; i < lenStatusArray; i++) {
                 priceArray = elementsPriceArray[i].innerText;
-                orderStatus = elementsStatusArray[i].innerText.slice(0, 9);
-
-                if (orderStatus == "Delivered") {
-                    countDeliveredOrder++;
+                orderStatus = elementsStatusArray[i].innerText.split(" ")[0];
+                
+                if (orderStatus == "Refund") {
+                    returnedOrder++;
+                }
+                else if (orderStatus == "Cancelled"){
+                    cancelledOrder++;
+                }
+                else if (orderStatus == "Delivered") {
+                    DeliveredOrder++;
                     var price = "";
                     for (var j = 0; j < priceArray.length; j++) {
                         var elem = priceArray[j];
@@ -44,9 +53,10 @@ chrome.runtime.onMessage.addListener((message, sender) => {
                     }
                 }
             }
+            totalOrder = returnedOrder + cancelledOrder + DeliveredOrder;
             chrome.storage.local.get("orderDetails", (resp) => {
-                chrome.storage.local.set({ "orderDetails": [lenStatusArray, countDeliveredOrder, totalDeliveredVlaue] })
-                
+                chrome.storage.local.set({ "orderDetails": [totalOrder, cancelledOrder, DeliveredOrder, returnedOrder, totalDeliveredVlaue] })
+
             })
         }, 500);
     }
