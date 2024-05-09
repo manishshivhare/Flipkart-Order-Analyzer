@@ -26,7 +26,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 window.close()
                
             })
-
+            document.getElementById("requistie").style.display = "block"
             buttonCont.appendChild(button)
             
 
@@ -63,6 +63,7 @@ window.addEventListener('DOMContentLoaded', () => {
             })
             clearButton.appendChild(ClearButton)
             document.getElementById("subCont").style.display = "block";
+            document.getElementById("requistie").style.display = "none";
             
             
         }
