@@ -23,10 +23,11 @@ window.addEventListener('DOMContentLoaded', () => {
                     tabs[0].id,
                     { from: "popup", query: "clicked" }
                 );
+                document.getElementById("requistie").style.display = "block";
                 window.close()
                
             })
-            document.getElementById("requistie").style.display = "block"
+            
             buttonCont.appendChild(button)
             
 
