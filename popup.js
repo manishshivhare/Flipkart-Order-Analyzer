@@ -4,12 +4,12 @@ window.addEventListener('DOMContentLoaded', () => {
     const clearButton = document.getElementById("clearButton");
     const buttonCont = document.getElementById("analyze_btn_cont");
     const resultList = document.getElementsByClassName("result");
-    
+
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         const tab = tabs[0]
 
-        
-        if(tab.url.includes('flipkart') && tab.url.includes('orders') ){
+
+        if (tab.url.includes('flipkart') && tab.url.includes('orders')) {
             const button = document.createElement("button")
             button.setAttribute("class", "analyze_btn")
 
@@ -17,7 +17,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
             button.addEventListener("click", () => {
-                
+
 
                 chrome.tabs.sendMessage(
                     tabs[0].id,
@@ -25,33 +25,35 @@ window.addEventListener('DOMContentLoaded', () => {
                 );
                 document.getElementById("requistie").style.display = "block";
                 window.close()
-               
-            })
-            
-            buttonCont.appendChild(button)
-            
 
-            
+            })
+
+            buttonCont.appendChild(button)
+
         }
-        else{
+        else {
             const errorMsg = document.createElement("h1")
             errorMsg.innerText = 'First please Open flipkart orders section'
             errorMsg.setAttribute("id", "errorMsg")
-            buttonCont.appendChild(errorMsg) 
+            buttonCont.appendChild(errorMsg)
             document.getElementById("subCont").style.display = "none";
-            
+
         }
     });
 
 
 
 
+    function showResults(){
+        
+    }
+
     chrome.storage.local.get("orderDetails", (resp) => {
 
         if (resp.orderDetails && resp.orderDetails.length > 0) {
-            i=0
+            i = 0
             resp.orderDetails.forEach(data => {
-                resultList[i].innerText+=data
+                resultList[i].innerText += data
                 i++
             })
 
@@ -65,12 +67,12 @@ window.addEventListener('DOMContentLoaded', () => {
             clearButton.appendChild(ClearButton)
             document.getElementById("subCont").style.display = "block";
             document.getElementById("requistie").style.display = "none";
-            
-            
+
         }
-        
+
 
     })
-    
+
 
 })
+

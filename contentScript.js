@@ -14,7 +14,7 @@ chrome.runtime.onMessage.addListener((message, sender) => {
             var returnedOrder = 0;
             var DeliveredOrder = 0;
             var totalOrder;
-            
+
             function scrollToBottom() {
 
 
@@ -47,24 +47,19 @@ chrome.runtime.onMessage.addListener((message, sender) => {
 
                         window.onload = scrollHandler();
                     }
-                    
-                    
+                    if (endButton == "No More Results To Display") {
 
-                }
+                        console.log("Finished scrolling")
+                        startAnalyzing();
+                    }
+
+                    
+                    }
+
 
                 window.onload = checkNextScroll();
-
-
-                console.log("Finished scrolling")
                 
-                
-
-
             }
-
-
-
-
 
             function startAnalyzing() {
                 console.log("Start Analyzing")
@@ -115,11 +110,20 @@ chrome.runtime.onMessage.addListener((message, sender) => {
 
                 })
             }
+            scrollToBottom();
             
-            
-
-
-
         }, 500);
     }
 })
+            
+
+
+
+
+
+
+
+
+
+
+
