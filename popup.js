@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     { from: "popup", query: "clicked" }
                 );
                 document.getElementById("requistie").style.display = "block";
-                window.close();
+                
             });
             buttonCont.appendChild(button);
         }

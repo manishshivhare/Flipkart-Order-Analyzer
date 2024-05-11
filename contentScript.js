@@ -49,13 +49,13 @@ chrome.runtime.onMessage.addListener((message, sender) => {
                 var elementsStatusArray = Array.from(document.getElementsByClassName("g1SRZp"));
                 var elementsPriceArray = Array.from(document.getElementsByClassName("col-2-12 mcVLQq"));
                 var lenStatusArray = elementsStatusArray.length;
-
+                
                 for (var i = 0; i < lenStatusArray; i++) {
                     priceArray = elementsPriceArray[i].innerText;
                     orderStatus = elementsStatusArray[i].innerText.split(" ")[0];
                     refundStatus = elementsStatusArray[i].innerText;
 
-                    if (refundStatus == "Refund completed") {
+                    if (refundStatus == "Refund Completed") {
                         returnedOrder++;
                     } else if (orderStatus == "Cancelled") {
                         cancelledOrder++;
