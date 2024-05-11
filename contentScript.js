@@ -72,19 +72,22 @@ chrome.runtime.onMessage.addListener((message, sender) => {
                 );
 
                 var lenStatusArray = elementsStatusArray.length;
-
+                
                 for (var i = 0; i < lenStatusArray; i++) {
                     priceArray = elementsPriceArray[i].innerText;
                     orderStatus = elementsStatusArray[i].innerText.split(" ")[0];
+                    refundStatus = elementsStatusArray[i].innerText;
 
-                    if (orderStatus == "Refund") {
+                    if (orderStatus == "Refund completed") {
+                        
                         returnedOrder++;
                     }
+
                     else if (orderStatus == "Cancelled") {
                         cancelledOrder++;
                     }
                     else if (orderStatus == "Delivered") {
-                        DeliveredOrder++;
+                        
                         var price = "";
                         for (var j = 0; j < priceArray.length; j++) {
                             var elem = priceArray[j];
@@ -100,6 +103,7 @@ chrome.runtime.onMessage.addListener((message, sender) => {
 
                         price = parseInt(price);
                         if (!isNaN(price)) {
+                            DeliveredOrder++;
                             totalDeliveredVlaue += price;
                         }
                     }
