@@ -10,15 +10,16 @@ window.addEventListener('DOMContentLoaded', () => {
             const button = document.createElement("button");
             button.setAttribute("class", "analyze_btn");
             button.innerText = "Analyze";
+            buttonCont.appendChild(button);
             button.addEventListener("click", () => {
+                document.getElementById("requistie").style.display = "block";
                 chrome.tabs.sendMessage(
                     tabs[0].id,
-                    { from: "popup", query: "clicked" }
+                    { from: "popup", query: "clicked" }, showOrdersDetail
                 );
-                document.getElementById("requistie").style.display = "block";
-                
+
+
             });
-            buttonCont.appendChild(button);
         }
         else {
             const errorMsg = document.createElement("h1");
@@ -29,10 +30,12 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    chrome.storage.local.get("orderDetails", (resp) => {
-        if (resp.orderDetails && resp.orderDetails.length > 0) {
+
+    function showOrdersDetail(orderDetails) {
+
+        if (orderDetails.length > 0) {
             let i = 0;
-            resp.orderDetails.forEach(data => {
+            orderDetails.forEach(data => {
                 resultList[i].innerText += data;
                 i++;
             });
@@ -47,5 +50,17 @@ window.addEventListener('DOMContentLoaded', () => {
             document.getElementById("subCont").style.display = "block";
             document.getElementById("requistie").style.display = "none";
         }
-    });
+    }
+
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+        const tab = tabs[0];
+        if (tab.url.includes('flipkart') && tab.url.includes('orders')) {
+
+            chrome.storage.local.get("orderDetails", (resp) => {
+                const orderDetails = resp.orderDetails;
+                showOrdersDetail(orderDetails);
+            });
+        }
+    })
+
 });
