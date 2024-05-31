@@ -22,7 +22,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         else {
             const errorMsg = document.createElement("h1");
-            errorMsg.innerText = 'First please Open flipkart orders section';
+            errorMsg.innerText = 'Please Open flipkart orders section';
             errorMsg.setAttribute("id", "errorMsg");
             buttonCont.appendChild(errorMsg);
             document.getElementById("subCont").style.display = "none";
