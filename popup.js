@@ -1,16 +1,15 @@
 window.addEventListener('DOMContentLoaded', () => {
-    const mainCont = document.getElementById("mainCont");
-    const clearButton = document.getElementById("clearButton");
+
+    
     const buttonCont = document.getElementById("analyze_btn_cont");
     const resultList = document.getElementsByClassName("result");
 
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         const tab = tabs[0];
         if (tab.url.includes('flipkart') && tab.url.includes('orders')) {
-            const button = document.createElement("button");
-            button.setAttribute("class", "analyze_btn " + "button-17");
-            button.innerText = "Analyze";
-            buttonCont.appendChild(button);
+            const button = document.getElementById("analyze_btn");
+            button.style.display = "block";
+            
             button.addEventListener("click", () => {
                 document.getElementById("requistie").style.display = "block";
                 chrome.tabs.sendMessage(
@@ -32,26 +31,27 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     function showOrdersDetail(orderDetails) {
+        if (orderDetails) {
 
-        if (orderDetails.length > 0) {
-            let i = 0;
-            orderDetails.forEach(data => {
-                resultList[i].innerText = data;
-                i++;
-            });
-            if (!document.getElementById("clearBtn")) {
-                const ClearButton = document.createElement("button");
-                ClearButton.innerText = "Clear Data";
-                ClearButton.setAttribute("id", "clearBtn");
-                ClearButton.setAttribute("class", "button-17");
-                ClearButton.addEventListener("click", () => {
-                    chrome.storage.local.remove("orderDetails");
-                    window.close();
+            if (orderDetails.length > 0) {
+                let i = 0;
+                orderDetails.forEach(data => {
+                    resultList[i].innerText = data;
+                    i++;
                 });
-                clearButton.appendChild(ClearButton);
+                if (!document.getElementById("clearBtn")) {
+                    const ClearButton = document.getElementById("clear_btn");
+                    ClearButton.style.display = "block"
+                    
+                    ClearButton.addEventListener("click", () => {
+                        chrome.storage.local.remove("orderDetails");
+                        window.close();
+                    });
+                    
+                }
+                document.getElementById("subCont").style.display = "block";
+                document.getElementById("requistie").style.display = "none";
             }
-            document.getElementById("subCont").style.display = "block";
-            document.getElementById("requistie").style.display = "none";
         }
     }
 
