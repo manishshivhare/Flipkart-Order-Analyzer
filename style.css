@@ -36,12 +36,21 @@
     border-radius: 10px;
 }
 
-
-
+.button-svgs{
+    padding-right: 8px;
+    height: 12px;
+    width: 15px;
+}
+.footer__heart {
+    padding: 0 0.4em;
+    
+    color: #ff0000;
+    
+}
 
 
 #subCont {
-    font-size: large;
+    font-size: 1.2em;
     display: none;
     color: black;
     margin-bottom: 15px;
@@ -58,8 +67,15 @@
 
 
 #requistie {
+    text-align: center;
+    margin: 0.6em 0;
+    font-size: 1.7em;
+    color: black;
     display: none;
+    font-weight: bold;
 }
+    
+
 
 body {
     margin: 0;
@@ -82,8 +98,8 @@ body {
 }
 
 #errorMsg {
-    color: white;
-    font-size: 20px;
+    color: black;
+    font-size: 1.5em;
 }
 
 
@@ -122,8 +138,8 @@ body {
 }
 
 .button-17:hover {
-    background: #222831;
-    color: white;
+    background: #e6e6e6;
+    
 
 }
 
@@ -156,3 +172,15 @@ body {
 .header_description p {
     margin: 0;
 }
+
+header{
+    margin-bottom: 1em;
+}
+.footer {
+    border-top: 1px solid #d0d0d0;
+    text-align: center;
+    padding: 0 1em;
+    margin: 0 -1em;
+    padding-top: 2.5em;
+}
+
