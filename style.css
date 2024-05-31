@@ -64,7 +64,20 @@
 
 }
 
+#flipkart-order-button{
+    display: none;
+}
+#flipkart-order-button div {
+    font-weight: bolder;
+    text-align: left;
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+}
 
+.flipkart-anchor{
+    text-decoration: none;
+    color: black;
+}
 
 #requistie {
     text-align: center;

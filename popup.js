@@ -21,10 +21,8 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
         else {
-            const errorMsg = document.createElement("h1");
-            errorMsg.innerText = 'Please Open flipkart orders section';
-            errorMsg.setAttribute("id", "errorMsg");
-            buttonCont.appendChild(errorMsg);
+            const errorMsg = document.getElementById("flipkart-order-button");
+            errorMsg.style.display = "block";
             document.getElementById("subCont").style.display = "none";
         }
     });
