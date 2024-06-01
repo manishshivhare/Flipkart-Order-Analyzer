@@ -5,12 +5,12 @@
     "manifest_version": 3,
     "action": {
         "default_popup": "./index.html",
-        "default_icon": "logo.png"
+        "default_icon": "./assets/logo.png"
     },
     "content_scripts": [
         {
             "matches": [
-                "http://www.flipkart.com/*", "https://www.flipkart.com/*"
+                "<all_urls>"
             ],
             "js": [
                 "./contentScript.js"

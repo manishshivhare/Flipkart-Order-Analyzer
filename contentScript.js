@@ -1,7 +1,8 @@
-console.log("content script injected")
 
+(()=>{
 chrome.runtime.onMessage.addListener((message, sender, response) => {
-    if (message.from === "popup" && message.query === "clicked") {
+    const {from, query} = message;
+    if (from === "popup" && query === "clicked") {
 
         var endButton = "";
         var statusOfPage = "";
@@ -90,5 +91,10 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
         scrollToBottom();
 
         
+    }else if (from === "flipkartButton") {
+        window.location.href = 'https://www.flipkart.com/account/login?ret=%2Faccount%2Forders%3Flink%3Dhome_orders&fromMyOrdersPage=true';
+        
     }
 })
+
+})();

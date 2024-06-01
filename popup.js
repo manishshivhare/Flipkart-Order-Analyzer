@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
 
     
-    const buttonCont = document.getElementById("analyze_btn_cont");
+    const flikartOderButton = document.getElementById("flikart-button-Id");
     const resultList = document.getElementsByClassName("result");
 
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
@@ -13,18 +13,27 @@ window.addEventListener('DOMContentLoaded', () => {
             button.addEventListener("click", () => {
                 document.getElementById("requistie").style.display = "block";
                 chrome.tabs.sendMessage(
-                    tabs[0].id,
+                    tab.id,
                     { from: "popup", query: "clicked" }, showOrdersDetail
                 );
 
 
             });
         }
-        else {
+        else{
             const errorMsg = document.getElementById("flipkart-order-button");
             errorMsg.style.display = "block";
             document.getElementById("subCont").style.display = "none";
+            flikartOderButton.addEventListener("click" ,()=>{
+                chrome.tabs.sendMessage(
+                    tab.id,
+                    { from: "flipkartButton" },()=>{
+                        window.close();
+                    }
+                );
+            })
         }
+        
     });
 
 
@@ -63,5 +72,8 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
     })
+    
+    
+    
 
 });
