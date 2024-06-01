@@ -4,7 +4,21 @@ window.addEventListener('DOMContentLoaded', () => {
     const flikartOderButton = document.getElementById("flikart-button-Id");
     const resultList = document.getElementsByClassName("result");
     const switchButton = document.getElementById("switch__checkbox");
+    
+    chrome.storage.local.get("isDark", (resp)=>{
+        if(resp.isDark){
+            document.getElementById("pagestyle").setAttribute("href", "./dark-style.css");
+            document.getElementById("switch__checkbox").checked = true;
+            
+        }else{
+            document.getElementById("pagestyle").setAttribute("href", "./style.css");
+        }
+
+        
+    })
     switchButton.addEventListener("change", ()=>{
+        chrome.storage.local.set({isDark: switchButton.checked})
+        
         if(switchButton.checked){
             document.getElementById("pagestyle").setAttribute("href", "./dark-style.css")
         }else{
