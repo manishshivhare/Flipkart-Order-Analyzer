@@ -14,7 +14,8 @@ body {
     line-height: 1.5em;
     font-family: 'Helvetica Neue', 'Lucida Grande', sans-serif;
     width: 340px;
-    color: #303030;
+    color: #EEEEEE; /* Light text color for dark theme */
+    background-color: #121212; /* Dark background color */
 }
 
 body.animated {
@@ -36,19 +37,21 @@ body.animated {
     margin-bottom: 15px;
     text-align: center;
     font-size: 30px;
-    color: white;
+    color: #FFFFFF;
     padding: 5px;
     border-radius: 50px;
+    background-color: #333333; /* Dark background for the heading */
 }
 
 .errorLabel {
-    color: white;
+    color: #FF5252; /* Light red color for errors */
     font-weight: bold;
     padding: 5px;
     text-align: center;
     margin-top: 20px;
     font-size: 14px;
     border-radius: 10px;
+    background-color: #333333; /* Dark background for the label */
 }
 
 .button-svgs {
@@ -59,21 +62,21 @@ body.animated {
 
 .footer__heart {
     padding: 0 0.4em;
-    color: #ff0000;
+    color: #FF0000;
 }
 
 #subCont {
     font-size: 1.2em;
     display: none;
-    color: black;
+    color: #EEEEEE;
     margin-bottom: 15px;
-    background-color: #F9F9F9;
-    padding: 10px;
+    background-color: #333333; /* Dark background for the sub container */
+    padding: 10px; /* Added padding for better readability */
 }
 
 .result-div {
     margin-bottom: 2px;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #EEEEEE;
 }
 
 #flipkart-order-button {
@@ -85,24 +88,25 @@ body.animated {
     text-align: left;
     font-size: 1.5em;
     margin-bottom: 0.5em;
+    color: #EEEEEE;
 }
 
 .flipkart-anchor {
     text-decoration: none;
-    color: black;
+    color: #BB86FC; /* Light purple color for links */
 }
 
 #requistie {
     text-align: center;
     margin: 0.6em 0;
     font-size: 1.7em;
-    color: black;
+    color: #EEEEEE;
     display: none;
     font-weight: bold;
 }
 
 #errorMsg {
-    color: black;
+    color: #FF5252; /* Light red color for error message */
     font-size: 1.5em;
 }
 
@@ -122,12 +126,12 @@ body.animated {
     border: 1px solid transparent;
     border-radius: 0.375em;
     cursor: pointer;
-    color: #505050;
-    background-color: #f5f5f5;
+    color: black;
+    background-color: #333333;
 }
 
 .button-17:hover {
-    background: #e6e6e6;
+    background: #CCCCCC;
 }
 
 .buttons-div {
@@ -151,10 +155,11 @@ body.animated {
     padding: 0 0.125em;
     font-size: 1.25em;
     font-weight: 700;
+    color: #EEEEEE;
 }
 
 .header_description {
-    color: #a0a0a0;
+    color: #A0A0A0;
 }
 
 .header_description p {
@@ -166,17 +171,19 @@ header {
 }
 
 .footer {
-    border-top: 1px solid #d0d0d0;
+    border-top: 1px solid #666666;
     text-align: center;
     padding: 2.5em 1em 0;
     margin: 0 -1em;
+    color: #EEEEEE;
+    background-color: #121212; /* Dark background for the footer */
 }
 
 .footer p {
     margin: 0;
     text-align: right;
     padding-top: 5px;
-    color: black;
+    color: #EEEEEE;
     font-weight: bold;
 }
 
@@ -208,7 +215,7 @@ header {
     bottom: 0;
     left: 0;
     cursor: pointer;
-    background-color: #ccc;
+    background-color: #444444;
     background-image: url(../assets/sun.svg), url(../assets/moon.svg);
     background-position: 4px center, calc(100% - 4px) center;
     background-repeat: no-repeat, no-repeat;

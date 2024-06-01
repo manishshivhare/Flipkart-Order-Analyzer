@@ -3,7 +3,15 @@ window.addEventListener('DOMContentLoaded', () => {
     
     const flikartOderButton = document.getElementById("flikart-button-Id");
     const resultList = document.getElementsByClassName("result");
-
+    const switchButton = document.getElementById("switch__checkbox");
+    switchButton.addEventListener("change", ()=>{
+        if(switchButton.checked){
+            document.getElementById("pagestyle").setAttribute("href", "./dark-style.css")
+        }else{
+            document.getElementById("pagestyle").setAttribute("href", "./style.css")
+        }
+    })
+    
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         const tab = tabs[0];
         if (tab.url.includes('flipkart') && tab.url.includes('orders')) {

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flipkart Analyzer</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link id="pagestyle" rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -15,22 +15,31 @@
         <header>
             <div class="header_heading">
                 <div>
-                    <img class = "header_icon"src="./assets/cart_icon.png" alt="icon">
-                    <h1 class = "header_name">Orders Analyzer</h1>
+                    <img class="header_icon" src="./assets/cart_icon.png" alt="icon">
+                    <h1 class="header_name">Orders Analyzer</h1>
                 </div>
+                <div>
+                    <div class="switch js-switch">
+                        <input type="checkbox" class="switch__checkbox js-switch__checkbox" id="switch__checkbox">
+                        <label class="switch__slider" for="switch__checkbox"></label>
+                    </div>
+                </div>
+
             </div>
-            <div class = "header_description">
-                <p>Analyze your Flipkart orders easily. Just go to the orders section and click "Analyze" for insights into your purchase history</p>
+
+            <div class="header_description">
+                <p>Analyze your Flipkart orders easily. Just go to the orders section and click "Analyze" for insights
+                    into your purchase history</p>
             </div>
         </header>
-        <div id = "flipkart-order-button">
+        <div id="flipkart-order-button">
             <div>Click "Flipkart orders" to open Flipkart orders section</div>
-            <button id = "flikart-button-Id" class = "button-17">Flipkart Orders</button>
-            
+            <button id="flikart-button-Id" class="button-17">Flipkart Orders</button>
+
         </div>
 
         <div id="mainCont">
-            
+
             <div id="requistie">
                 Loading your older orders!
             </div>
@@ -46,10 +55,12 @@
 
 
         </div>
-        
+
         <div class="buttons-div">
-            <button class="button-17" id="analyze_btn"><img class = "button-svgs" src="./assets/analyze.png" alt="">Analyze</button>
-            <button class="button-17" id="clear_btn"><img class = "button-svgs" src="./assets/reset.png" alt="">Clear</button>
+            <button class="button-17" id="analyze_btn"><img class="button-svgs" src="./assets/analyze.png"
+                    alt="">Analyze</button>
+            <button class="button-17" id="clear_btn"><img class="button-svgs" src="./assets/reset.png"
+                    alt="">Clear</button>
 
         </div>
         <div class="footer">
