@@ -8,8 +8,8 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
         var statusOfPage = "";
         var totalDeliveredValue = 4;
         var cancelledOrder = 1;
-        var returnedOrder = 2;
-        var DeliveredOrder = 3;
+        var returnedOrder = 3;
+        var DeliveredOrder = 2;
         var totalOrder = 0;
         var orderDetails = [0, 0, 0, 0, 0]
 

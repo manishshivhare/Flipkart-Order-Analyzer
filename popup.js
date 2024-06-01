@@ -20,6 +20,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
             });
         }
+        else if(tab.url.includes('chrome:')){
+            const errorMsg = document.getElementById("flipkart-order-button");
+            errorMsg.innerHTML = "<div>Can't acess chrome pages</div>"
+            errorMsg.style.display = "block";
+        }
         else{
             const errorMsg = document.getElementById("flipkart-order-button");
             errorMsg.style.display = "block";
