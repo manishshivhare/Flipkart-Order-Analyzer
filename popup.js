@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const switchButton = document.getElementById("switch__checkbox");
 
     function setTheme(isDark) {
-        const theme = isDark ? "dark-style.css" : "style.css";
+        const theme = isDark ? "styleSheets/dark-style.css" : "styleSheets/style.css";
         document.getElementById("pagestyle").setAttribute("href", `./${theme}`);
         switchButton.checked = isDark;
     }
