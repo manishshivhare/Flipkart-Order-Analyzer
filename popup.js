@@ -81,6 +81,13 @@ window.addEventListener('DOMContentLoaded', () => {
                 document.getElementById("orders-data").style.display = "block";
                 document.getElementById("requistie").style.display = "none";
             }
+            const amount_spent = document.getElementById("amount-spent");
+            let format = new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                minimumFractionDigits: 2,
+            });
+            amount_spent.innerText = (format.format(amount_spent.innerText)) ;
         }
     }
 
