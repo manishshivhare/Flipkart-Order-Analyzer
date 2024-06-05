@@ -45,7 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
         else {
             const errorMsg = document.getElementById("flipkart-order-button");
             errorMsg.style.display = "block";
-            document.getElementById("subCont").style.display = "none";
+            document.getElementById("orders-data").style.display = "none";
             flikartOderButton.addEventListener("click", () => {
                 chrome.tabs.sendMessage(
                     tab.id,
@@ -78,7 +78,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     });
 
                 }
-                document.getElementById("subCont").style.display = "block";
+                document.getElementById("orders-data").style.display = "block";
                 document.getElementById("requistie").style.display = "none";
             }
         }

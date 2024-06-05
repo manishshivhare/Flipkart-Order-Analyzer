@@ -63,16 +63,17 @@ body {
 }
 
 #subCont {
+    border-radius: 0.375em;
     font-size: 1.2em;
-    display: none;
+    
     color: #EEEEEE;
-    margin-bottom: 15px;
+    margin-bottom: 0.38em;
     background-color: #333333; 
     padding: 10px; 
 }
 
 .result-div {
-    margin-bottom: 2px;
+    
     border-bottom: 1px solid #EEEEEE;
 }
 
@@ -290,3 +291,12 @@ header {
   }
 }
 
+.total-spent{
+    border-radius: 0.375em;
+    border-bottom: none;
+    margin-bottom: 0.38em;
+    padding: 5px;
+    background-color: #333333;
+    color: white;
+    font-size: 1.5em;
+}

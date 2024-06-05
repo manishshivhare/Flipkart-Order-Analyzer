@@ -61,16 +61,27 @@ body {
 }
 
 #subCont {
+    border-radius: 0.375em;
     font-size: 1.2em;
-    display: none;
+    
     color: black;
-    margin-bottom: 15px;
+    margin-bottom: 0.38em;
     background-color: #F9F9F9;
     padding: 10px;
 }
 
+.total-spent{
+    border-radius: 0.375em;
+    border-bottom: none;
+    margin-bottom: 0.38em;
+    padding: 5px;
+    background-color: #F9F9F9;
+    color: black;
+    font-size: 1.5em;
+}
+
 .result-div {
-    margin-bottom: 2px;
+    
     border-bottom: 1px solid black;
 }
 
@@ -131,7 +142,7 @@ body {
 
 .buttons-div {
     display: inline-flex;
-    gap: 0.5em;
+    gap: 0.57em;
 }
 
 .header_heading {
@@ -283,4 +294,6 @@ header {
     opacity: 0;
   }
 }
-
+#orders-data{
+    display: none;
+}
