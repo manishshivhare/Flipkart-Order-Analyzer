@@ -31,8 +31,10 @@ window.addEventListener('DOMContentLoaded', () => {
                 document.getElementById("requistie").style.display = "block";
                 chrome.tabs.sendMessage(
                     tab.id,
-                    { from: "popup", query: "clicked" }, showOrdersDetail
+                    { from: "popup", query: "clicked" }
                 );
+                chrome.storage.local.remove("orderDetails");
+                updateOrdersDetails()
 
 
             });
@@ -87,7 +89,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 currency: 'INR',
                 minimumFractionDigits: 2,
             });
-            amount_spent.innerText = (format.format(amount_spent.innerText)) ;
+            amount_spent.innerText = (format.format(amount_spent.innerText));
         }
     }
 
@@ -101,6 +103,20 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
     })
+    function updateOrdersDetails() {
+        var intervalId = setInterval(() => {
+            chrome.storage.local.get("orderDetails", (resp) => {
+                const orderDetails = resp.orderDetails;
+                if (orderDetails) {
+                    if (orderDetails.length > 0) {
+                        showOrdersDetail(orderDetails);
+                        clearInterval(intervalId);
+                    }
+                }
+            });
+
+        }, 500)
+    }
 
 
 

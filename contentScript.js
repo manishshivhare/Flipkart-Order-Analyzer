@@ -85,10 +85,10 @@
                     }
                 }
                 orderDetails[totalOrder] = orderDetails[returnedOrder] + orderDetails[cancelledOrder] + orderDetails[DeliveredOrder];
-                response(orderDetails);
                 chrome.storage.local.set({
                     "orderDetails": orderDetails
                 })
+                
 
 
             }
