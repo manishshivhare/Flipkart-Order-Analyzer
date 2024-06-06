@@ -115,7 +115,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-        }, 500)
+        }, 100)
     }
 
 
