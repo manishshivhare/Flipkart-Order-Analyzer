@@ -9,7 +9,7 @@
 
 body {
     
-    transition: 0.4s;
+    
     margin: 0;
     padding: 1em;
     font-size: 0.8275em;
@@ -305,7 +305,7 @@ header {
     display:inline-block;
     width: 120px;
     height: 24px;
-
+    cursor: pointer;
     overflow:hidden;
     position:relative;
     background:
@@ -324,6 +324,7 @@ header {
       background-size: contain;
     }
     input{ 
+        cursor: pointer;
       -moz-appearance:none;
       -webkit-appearance:none;
       opacity: 0;

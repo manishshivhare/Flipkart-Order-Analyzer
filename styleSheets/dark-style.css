@@ -8,7 +8,7 @@
 }
 
 body {
-    transition: 0.4s;
+    
     margin: 0;
     padding: 1em;
     font-size: 0.8275em;
@@ -224,8 +224,7 @@ header {
 
 
 .switch__slider:before {
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
+    
     border-radius: 7px;
     content: "";
     position: absolute;
@@ -342,6 +341,7 @@ header {
         -moz-appearance: none;
         -webkit-appearance: none;
         opacity: 0;
+        cursor: pointer;    
         display: inline-block;
         width: 20%;
         height: 100%;
@@ -349,7 +349,7 @@ header {
         padding: 0;
         z-index: 2;
         position: relative;
-
+        
         &:hover+i,
         &:checked+i {
             opacity: 1;
