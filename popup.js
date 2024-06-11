@@ -119,6 +119,15 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    document.querySelectorAll('input[type=radio]').forEach(function (radio) {
+        radio.addEventListener('change', function () {
+
+            if (this.value > 2) {
+
+                window.open("https://chromewebstore.google.com/detail/flipkart-order-analyzer/mcpflafdobpbfojllbpbciphhgknnjje?authuser=0&hl=en-GB/reviews",)
+            }
+        });
+    });
 
 
 });
