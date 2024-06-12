@@ -350,8 +350,7 @@ header {
         z-index: 2;
         position: relative;
         
-        &:hover+i,
-        &:checked+i {
+        &:hover+i{
             opacity: 1;
         }
     }

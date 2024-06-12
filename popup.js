@@ -51,7 +51,7 @@ window.addEventListener('DOMContentLoaded', () => {
             flikartOderButton.addEventListener("click", () => {
                 chrome.tabs.sendMessage(
                     tab.id,
-                    { from: "flipkartButton" }, () => {
+                    { from: "flipkartButton" , query: "clicked" }, () => {
                         window.close();
                     }
                 );
@@ -125,6 +125,8 @@ window.addEventListener('DOMContentLoaded', () => {
             if (this.value > 2) {
 
                 window.open("https://chromewebstore.google.com/detail/flipkart-order-analyzer/mcpflafdobpbfojllbpbciphhgknnjje?authuser=0&hl=en-GB/reviews",)
+            }else{
+                window.open("https://docs.google.com/forms/d/e/1FAIpQLSd2vkK1K6qdWe16u-oeez4iT-xsjvOqv2ipLw-amJ_KOcHUtQ/viewform")
             }
         });
     });
