@@ -7,6 +7,10 @@
         "default_popup": "./index.html",
         "default_icon": "./assets/logo.png"
     },
+    "icons" : {
+        "48": "./assets/logo.png",
+        "128": "./assets/logo.png"
+    },
     "content_scripts": [
         {
             "matches": [
