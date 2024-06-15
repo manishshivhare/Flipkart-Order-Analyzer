@@ -95,14 +95,11 @@ function analyzeContent() {
     chrome.runtime.onMessage.addListener((message, sender) => {
         const { from, query } = message;
         if (from === "popup" && query === "clicked") {
-
             analyzeContent();
-
-
-        } else if (from === "flipkartButton" && query === "clicked") {
-            window.location.href = 'https://www.flipkart.com/account/login?ret=%2Faccount%2Forders%3Flink%3Dhome_orders&fromMyOrdersPage=true';
-
         }
     })
 
 })();
+
+
+

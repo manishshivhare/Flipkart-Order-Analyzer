@@ -38,23 +38,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
             });
-        }
-        else if (tab.url.includes('chrome:')) {
-            const errorMsg = document.getElementById("flipkart-order-button");
-            errorMsg.innerHTML = "<div>Can't acess chrome pages</div>"
-            errorMsg.style.display = "block";
-        }
-        else {
+        }else {
             const errorMsg = document.getElementById("flipkart-order-button");
             errorMsg.style.display = "block";
             document.getElementById("orders-data").style.display = "none";
             flikartOderButton.addEventListener("click", () => {
-                chrome.tabs.sendMessage(
-                    tab.id,
-                    { from: "flipkartButton" , query: "clicked" }, () => {
-                        window.close();
-                    }
-                );
+
+                window.open("https://www.flipkart.com/account/login?ret=%2Faccount%2Forders%3Flink%3Dhome_orders&fromMyOrdersPage=true")
+
             })
         }
 
@@ -125,7 +116,7 @@ window.addEventListener('DOMContentLoaded', () => {
             if (this.value > 2) {
 
                 window.open("https://chromewebstore.google.com/detail/flipkart-order-analyzer/mcpflafdobpbfojllbpbciphhgknnjje?authuser=0&hl=en-GB/reviews",)
-            }else{
+            } else {
                 window.open("https://docs.google.com/forms/d/e/1FAIpQLSd2vkK1K6qdWe16u-oeez4iT-xsjvOqv2ipLw-amJ_KOcHUtQ/viewform")
             }
         });
