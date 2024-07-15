@@ -1,3 +1,4 @@
+const container = document.getElementById('container');
 
 function analyzeContent() {
     var endButton = "";
@@ -30,6 +31,7 @@ function analyzeContent() {
         }
 
         function checkNextScroll() {
+            applyFilter();
             const endButtonElement = document.querySelector(".v0q-qo");
             if (endButtonElement) {
                 endButton = endButtonElement.innerText;
@@ -89,12 +91,19 @@ function analyzeContent() {
 
     }
     scrollToBottom();
+
 }
+
+function applyFilter(){
+    container.style.cssText = "filter: blur(5px)";
+}
+
 (() => {
 
     chrome.runtime.onMessage.addListener((message, sender) => {
         const { from, query } = message;
         if (from === "popup" && query === "clicked") {
+            applyFilter();
             analyzeContent();
         }
     })

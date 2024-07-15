@@ -4,6 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const flikartOderButton = document.getElementById("flikart-button-Id");
     const resultList = document.getElementsByClassName("result");
     const switchButton = document.getElementById("switch__checkbox");
+    
 
     function setTheme(isDark) {
         const theme = isDark ? "styleSheets/dark-style.css" : "styleSheets/style.css";
@@ -24,14 +25,19 @@ window.addEventListener('DOMContentLoaded', () => {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         const tab = tabs[0];
         if (tab.url.includes('flipkart') && tab.url.includes('orders')) {
-            const button = document.getElementById("analyze_btn");
-            button.style.display = "block";
+            const analyzeBtn = document.getElementById("analyze_btn");
+            chrome.storage.local.get('isAnalyzed', (resp) =>{
+                analyzeBtn.innerHTML += resp.isAnalyzed ? 'Re-analyze' : 'Analyze';
+            })
+            analyzeBtn.style.display = "block";
 
-            button.addEventListener("click", () => {
-                document.getElementById("requistie").style.display = "block";
+            analyzeBtn.addEventListener("click", () => {
+                document.getElementById("requistie").style.display  = "block";
+                chrome.storage.local.set({ isAnalyzed: true })
+                analyzeBtn.style.display = "none";
                 chrome.tabs.sendMessage(
                     tab.id,
-                    { from: "popup", query: "clicked" }
+                    { from: "popup", query: "clicked" } 
                 );
                 chrome.storage.local.remove("orderDetails");
                 updateOrdersDetails()
@@ -67,6 +73,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
                     ClearButton.addEventListener("click", () => {
                         chrome.storage.local.remove("orderDetails");
+                        chrome.storage.local.set({ isAnalyzed: false })
                         window.close();
                     });
 
