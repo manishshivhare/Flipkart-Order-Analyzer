@@ -86,6 +86,7 @@ function analyzeContent() {
         chrome.storage.local.set({
             "orderDetails": orderDetails
         })
+        removeFilter();
 
 
 
@@ -96,6 +97,9 @@ function analyzeContent() {
 
 function applyFilter(){
     container.style.cssText = "filter: blur(5px)";
+}
+function removeFilter(){
+    container.style.cssText = "filter: blur(0px)";
 }
 
 (() => {
