@@ -1,19 +1,19 @@
-const container = document.getElementById('container');
+const container = document.getElementById("container");
 
 function applyFilter() {
   if (container) {
-    container.style.cssText = 'filter: blur(5px)';
+    container.style.cssText = "filter: blur(5px)";
   }
 }
 
 function removeFilter() {
   if (container) {
-    container.style.cssText = 'filter: blur(0px)';
+    container.style.cssText = "filter: blur(0px)";
   }
 }
 
 function analyzeContent() {
-  let endButton = '';
+  let endButton = "";
   const totalDeliveredValue = 4;
   const cancelledOrder = 1;
   const returnedOrder = 3;
@@ -22,20 +22,27 @@ function analyzeContent() {
   const orderDetails = [0, 0, 0, 0, 0];
 
   function startAnalyzing() {
-    const elementsStatusArray = Array.from(document.getElementsByClassName('g1SRZp'));
-    const elementsPriceArray = Array.from(document.getElementsByClassName('col-2-12 mcVLQq'));
+    const elementsStatusArray = Array.from(
+      document.getElementsByClassName("sNKed5"),
+    );
+    const elementsPriceArray = Array.from(
+      document.getElementsByClassName("QF9IHY"),
+    );
 
     for (let i = 0; i < elementsStatusArray.length; i += 1) {
-      const priceText = elementsPriceArray[i]?.innerText || '';
+      const priceText = elementsPriceArray[i]?.innerText || "";
       const refundStatus = elementsStatusArray[i].innerText;
-      const orderStatus = refundStatus.split(' ')[0];
+      const orderStatus = refundStatus.split(" ")[0];
 
-      if (refundStatus === 'Refund Completed') {
+      if (refundStatus === "Refund Completed") {
         orderDetails[returnedOrder] += 1;
-      } else if (orderStatus === 'Cancelled') {
+      } else if (orderStatus === "Cancelled") {
         orderDetails[cancelledOrder] += 1;
-      } else if (orderStatus === 'Delivered' || refundStatus === 'Refund Rejected') {
-        const digits = priceText.replace(/[^0-9]/g, '');
+      } else if (
+        orderStatus === "Delivered" ||
+        refundStatus === "Refund Rejected"
+      ) {
+        const digits = priceText.replace(/[^0-9]/g, "");
         const price = Number.parseInt(digits, 10);
 
         if (!Number.isNaN(price)) {
@@ -45,20 +52,23 @@ function analyzeContent() {
       }
     }
 
-    orderDetails[totalOrder] = orderDetails[returnedOrder] + orderDetails[cancelledOrder] + orderDetails[deliveredOrder];
+    orderDetails[totalOrder] =
+      orderDetails[returnedOrder] +
+      orderDetails[cancelledOrder] +
+      orderDetails[deliveredOrder];
     chrome.storage.local.set({ orderDetails });
     removeFilter();
   }
 
   function checkNextScroll() {
-    const endButtonElement = document.querySelector('.v0q-qo');
+    const endButtonElement = document.querySelector(".v0q-qo");
     if (endButtonElement) {
       endButton = endButtonElement.innerText;
     }
 
-    if (endButton !== 'No More Results To Display') {
-      const showMoreButton = document.querySelector('.QqFHMw.v0q-qo');
-      if (showMoreButton && showMoreButton.innerText === 'Show More Orders') {
+    if (endButton !== "No More Results To Display") {
+      const showMoreButton = document.querySelector(".dDeuVV");
+      if (showMoreButton && showMoreButton.innerText === "Show More Orders") {
         showMoreButton.click();
       }
 
@@ -74,7 +84,7 @@ function analyzeContent() {
 
 chrome.runtime.onMessage.addListener((message) => {
   const { from, query } = message;
-  if (from === 'popup' && query === 'clicked') {
+  if (from === "popup" && query === "clicked") {
     applyFilter();
     analyzeContent();
   }
