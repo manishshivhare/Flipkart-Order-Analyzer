@@ -105,6 +105,7 @@ body {
 }
 
 #analyze_btn,
+#stop_btn,
 #clear_btn {
   display: none;
 }

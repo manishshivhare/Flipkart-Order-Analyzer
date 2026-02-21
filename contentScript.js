@@ -1,4 +1,6 @@
 const container = document.getElementById("container");
+let shouldStopAnalyzing = false;
+let scrollTimeoutId = null;
 
 function applyFilter() {
   if (container) {
@@ -13,6 +15,7 @@ function removeFilter() {
 }
 
 function analyzeContent() {
+  shouldStopAnalyzing = false;
   let endButton = "";
   const totalDeliveredValue = 4;
   const cancelledOrder = 1;
@@ -22,6 +25,12 @@ function analyzeContent() {
   const orderDetails = [0, 0, 0, 0, 0];
 
   function startAnalyzing() {
+    if (shouldStopAnalyzing) {
+      removeFilter();
+      chrome.storage.local.set({ isAnalyzing: false });
+      return;
+    }
+
     const elementsStatusArray = Array.from(
       document.getElementsByClassName("sNKed5"),
     );
@@ -57,10 +66,17 @@ function analyzeContent() {
       orderDetails[cancelledOrder] +
       orderDetails[deliveredOrder];
     chrome.storage.local.set({ orderDetails });
+    chrome.storage.local.set({ isAnalyzing: false });
     removeFilter();
   }
 
   function checkNextScroll() {
+    if (shouldStopAnalyzing) {
+      removeFilter();
+      chrome.storage.local.set({ isAnalyzing: false });
+      return;
+    }
+
     const endButtonElement = document.querySelector(".dDeuVV");
     if (endButtonElement) {
       endButton = endButtonElement.innerText;
@@ -73,7 +89,7 @@ function analyzeContent() {
       }
 
       window.scrollTo(0, document.body.scrollHeight);
-      setTimeout(checkNextScroll, 1000);
+      scrollTimeoutId = setTimeout(checkNextScroll, 1000);
     } else {
       startAnalyzing();
     }
@@ -87,5 +103,16 @@ chrome.runtime.onMessage.addListener((message) => {
   if (from === "popup" && query === "clicked") {
     applyFilter();
     analyzeContent();
+  }
+
+  if (from === "popup" && query === "stop") {
+    shouldStopAnalyzing = true;
+    if (scrollTimeoutId) {
+      clearTimeout(scrollTimeoutId);
+      scrollTimeoutId = null;
+    }
+
+    chrome.storage.local.set({ isAnalyzing: false });
+    removeFilter();
   }
 });
