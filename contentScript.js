@@ -61,7 +61,7 @@ function analyzeContent() {
   }
 
   function checkNextScroll() {
-    const endButtonElement = document.querySelector(".v0q-qo");
+    const endButtonElement = document.querySelector(".dDeuVV");
     if (endButtonElement) {
       endButton = endButtonElement.innerText;
     }
