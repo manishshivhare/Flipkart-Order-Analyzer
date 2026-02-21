@@ -1,118 +1,81 @@
 const container = document.getElementById('container');
 
+function applyFilter() {
+  if (container) {
+    container.style.cssText = 'filter: blur(5px)';
+  }
+}
+
+function removeFilter() {
+  if (container) {
+    container.style.cssText = 'filter: blur(0px)';
+  }
+}
+
 function analyzeContent() {
-    var endButton = "";
-    var statusOfPage = "";
-    var totalDeliveredValue = 4;
-    var cancelledOrder = 1;
-    var returnedOrder = 3;
-    var DeliveredOrder = 2;
-    var totalOrder = 0;
-    var orderDetails = [0, 0, 0, 0, 0]
+  let endButton = '';
+  const totalDeliveredValue = 4;
+  const cancelledOrder = 1;
+  const returnedOrder = 3;
+  const deliveredOrder = 2;
+  const totalOrder = 0;
+  const orderDetails = [0, 0, 0, 0, 0];
 
-    function scrollToBottom() {
+  function startAnalyzing() {
+    const elementsStatusArray = Array.from(document.getElementsByClassName('g1SRZp'));
+    const elementsPriceArray = Array.from(document.getElementsByClassName('col-2-12 mcVLQq'));
 
-        function scrollHandler() {
-            const scrollableHeight = document.body.scrollHeight;
-            const showMoreButton = document.querySelector(".QqFHMw.v0q-qo");
+    for (let i = 0; i < elementsStatusArray.length; i += 1) {
+      const priceText = elementsPriceArray[i]?.innerText || '';
+      const refundStatus = elementsStatusArray[i].innerText;
+      const orderStatus = refundStatus.split(' ')[0];
 
-            if (showMoreButton) {
-                statusOfPage = showMoreButton.innerText;
-                if (statusOfPage === "Show More Orders") {
-                    showMoreButton.click();
-                }
-            }
+      if (refundStatus === 'Refund Completed') {
+        orderDetails[returnedOrder] += 1;
+      } else if (orderStatus === 'Cancelled') {
+        orderDetails[cancelledOrder] += 1;
+      } else if (orderStatus === 'Delivered' || refundStatus === 'Refund Rejected') {
+        const digits = priceText.replace(/[^0-9]/g, '');
+        const price = Number.parseInt(digits, 10);
 
-            window.scrollTo(0, scrollableHeight);
-
-            if (endButton !== "No More Results To Display") {
-                setTimeout(checkNextScroll, 1000);
-            }
+        if (!Number.isNaN(price)) {
+          orderDetails[deliveredOrder] += 1;
+          orderDetails[totalDeliveredValue] += price;
         }
-
-        function checkNextScroll() {
-            applyFilter();
-            const endButtonElement = document.querySelector(".v0q-qo");
-            if (endButtonElement) {
-                endButton = endButtonElement.innerText;
-            }
-
-            if (endButton !== "No More Results To Display") {
-                scrollHandler();
-            } else {
-                console.log("Finished scrolling");
-                startAnalyzing();
-            }
-        }
-
-
-        window.onload = checkNextScroll();
+      }
     }
 
-    function startAnalyzing() {
-        console.log("Start Analyzing")
-        var elementsStatusArray = Array.from(document.getElementsByClassName("g1SRZp"));
-        var elementsPriceArray = Array.from(document.getElementsByClassName("col-2-12 mcVLQq"));
-        var lenStatusArray = elementsStatusArray.length;
+    orderDetails[totalOrder] = orderDetails[returnedOrder] + orderDetails[cancelledOrder] + orderDetails[deliveredOrder];
+    chrome.storage.local.set({ orderDetails });
+    removeFilter();
+  }
 
-        for (var i = 0; i < lenStatusArray; i++) {
-            priceArray = elementsPriceArray[i].innerText;
-            orderStatus = elementsStatusArray[i].innerText.split(" ")[0];
-            refundStatus = elementsStatusArray[i].innerText;
-
-            if (refundStatus == "Refund Completed") {
-                orderDetails[returnedOrder]++;
-            } else if (orderStatus == "Cancelled") {
-                orderDetails[cancelledOrder]++;
-            } else if (orderStatus == "Delivered" || refundStatus == "Refund Rejected") {
-                var price = "";
-                for (var j = 0; j < priceArray.length; j++) {
-                    var elem = priceArray[j];
-                    if (elem === "+") {
-                        break;
-                    }
-                    if (!isNaN(parseInt(elem))) {
-                        price += elem;
-                    }
-                }
-                price = parseInt(price);
-                if (!isNaN(price)) {
-                    orderDetails[DeliveredOrder]++;
-                    orderDetails[totalDeliveredValue] += price;
-                }
-            }
-        }
-        orderDetails[totalOrder] = orderDetails[returnedOrder] + orderDetails[cancelledOrder] + orderDetails[DeliveredOrder];
-        chrome.storage.local.set({
-            "orderDetails": orderDetails
-        })
-        removeFilter();
-
-
-
+  function checkNextScroll() {
+    const endButtonElement = document.querySelector('.v0q-qo');
+    if (endButtonElement) {
+      endButton = endButtonElement.innerText;
     }
-    scrollToBottom();
 
+    if (endButton !== 'No More Results To Display') {
+      const showMoreButton = document.querySelector('.QqFHMw.v0q-qo');
+      if (showMoreButton && showMoreButton.innerText === 'Show More Orders') {
+        showMoreButton.click();
+      }
+
+      window.scrollTo(0, document.body.scrollHeight);
+      setTimeout(checkNextScroll, 1000);
+    } else {
+      startAnalyzing();
+    }
+  }
+
+  checkNextScroll();
 }
 
-function applyFilter(){
-    container.style.cssText = "filter: blur(5px)";
-}
-function removeFilter(){
-    container.style.cssText = "filter: blur(0px)";
-}
-
-(() => {
-
-    chrome.runtime.onMessage.addListener((message, sender) => {
-        const { from, query } = message;
-        if (from === "popup" && query === "clicked") {
-            applyFilter();
-            analyzeContent();
-        }
-    })
-
-})();
-
-
-
+chrome.runtime.onMessage.addListener((message) => {
+  const { from, query } = message;
+  if (from === 'popup' && query === 'clicked') {
+    applyFilter();
+    analyzeContent();
+  }
+});
