@@ -4,6 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const switchButton = document.getElementById('switch__checkbox');
   const analyzeBtn = document.getElementById('analyze_btn');
   const analyzeLabel = document.getElementById('analyze_label');
+  const stopBtn = document.getElementById('stop_btn');
   const clearBtn = document.getElementById('clear_btn');
   const loadingCard = document.getElementById('requistie');
   const ordersCard = document.getElementById('orders-data');
@@ -35,6 +36,14 @@ window.addEventListener('DOMContentLoaded', () => {
     ordersCard.style.display = 'block';
     loadingCard.style.display = 'none';
     clearBtn.style.display = 'block';
+    stopBtn.style.display = 'none';
+    analyzeBtn.style.display = 'inline-flex';
+  };
+
+  const setAnalyzingState = (isAnalyzing) => {
+    loadingCard.style.display = isAnalyzing ? 'block' : 'none';
+    analyzeBtn.style.display = isAnalyzing ? 'none' : 'inline-flex';
+    stopBtn.style.display = isAnalyzing ? 'inline-flex' : 'none';
   };
 
   const updateOrdersDetails = () => {
@@ -43,6 +52,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const orderDetails = resp.orderDetails;
         if (Array.isArray(orderDetails) && orderDetails.length > 0) {
           showOrdersDetail(orderDetails);
+          chrome.storage.local.set({ isAnalyzing: false });
           clearInterval(intervalId);
         }
       });
@@ -61,7 +71,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   clearBtn.addEventListener('click', () => {
     chrome.storage.local.remove('orderDetails');
-    chrome.storage.local.set({ isAnalyzed: false });
+    chrome.storage.local.set({ isAnalyzed: false, isAnalyzing: false });
     window.close();
   });
 
@@ -79,18 +89,27 @@ window.addEventListener('DOMContentLoaded', () => {
         analyzeLabel.textContent = resp.isAnalyzed ? 'Re-analyze' : 'Analyze';
       });
 
+      chrome.storage.local.get('isAnalyzing', (resp) => {
+        setAnalyzingState(Boolean(resp.isAnalyzing));
+      });
+
       chrome.storage.local.get('orderDetails', (resp) => {
         showOrdersDetail(resp.orderDetails);
       });
 
       analyzeBtn.addEventListener('click', () => {
-        loadingCard.style.display = 'block';
-        analyzeBtn.style.display = 'none';
-        chrome.storage.local.set({ isAnalyzed: true });
+        setAnalyzingState(true);
+        chrome.storage.local.set({ isAnalyzed: true, isAnalyzing: true });
         chrome.storage.local.remove('orderDetails');
 
         chrome.tabs.sendMessage(tab.id, { from: 'popup', query: 'clicked' });
         updateOrdersDetails();
+      });
+
+      stopBtn.addEventListener('click', () => {
+        chrome.tabs.sendMessage(tab.id, { from: 'popup', query: 'stop' });
+        chrome.storage.local.set({ isAnalyzing: false });
+        setAnalyzingState(false);
       });
     } else {
       notOnOrdersCard.style.display = 'block';
