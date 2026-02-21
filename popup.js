@@ -1,133 +1,104 @@
 window.addEventListener('DOMContentLoaded', () => {
+  const flipkartOrderButton = document.getElementById('flikart-button-Id');
+  const resultList = document.getElementsByClassName('result');
+  const switchButton = document.getElementById('switch__checkbox');
+  const analyzeBtn = document.getElementById('analyze_btn');
+  const analyzeLabel = document.getElementById('analyze_label');
+  const clearBtn = document.getElementById('clear_btn');
+  const loadingCard = document.getElementById('requistie');
+  const ordersCard = document.getElementById('orders-data');
+  const notOnOrdersCard = document.getElementById('flipkart-order-button');
 
+  const setTheme = (isDark = false) => {
+    const theme = isDark ? 'styleSheets/dark-style.css' : 'styleSheets/style.css';
+    document.getElementById('pagestyle').setAttribute('href', `./${theme}`);
+    switchButton.checked = isDark;
+  };
 
-    const flikartOderButton = document.getElementById("flikart-button-Id");
-    const resultList = document.getElementsByClassName("result");
-    const switchButton = document.getElementById("switch__checkbox");
-    
+  const onOrdersTab = (url = '') => url.includes('flipkart.com') && url.includes('orders');
 
-    function setTheme(isDark) {
-        const theme = isDark ? "styleSheets/dark-style.css" : "styleSheets/style.css";
-        document.getElementById("pagestyle").setAttribute("href", `./${theme}`);
-        switchButton.checked = isDark;
+  const formatCurrency = (value) => new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    minimumFractionDigits: 2
+  }).format(Number(value || 0));
+
+  const showOrdersDetail = (orderDetails) => {
+    if (!orderDetails || orderDetails.length < 5) return;
+
+    resultList[0].innerText = orderDetails[0] ?? 0;
+    resultList[1].innerText = orderDetails[1] ?? 0;
+    resultList[2].innerText = orderDetails[2] ?? 0;
+    resultList[3].innerText = orderDetails[3] ?? 0;
+    document.getElementById('amount-spent').innerText = formatCurrency(orderDetails[4]);
+
+    ordersCard.style.display = 'block';
+    loadingCard.style.display = 'none';
+    clearBtn.style.display = 'block';
+  };
+
+  const updateOrdersDetails = () => {
+    const intervalId = setInterval(() => {
+      chrome.storage.local.get('orderDetails', (resp) => {
+        const orderDetails = resp.orderDetails;
+        if (Array.isArray(orderDetails) && orderDetails.length > 0) {
+          showOrdersDetail(orderDetails);
+          clearInterval(intervalId);
+        }
+      });
+    }, 200);
+  };
+
+  chrome.storage.local.get('isDark', (resp) => {
+    setTheme(Boolean(resp.isDark));
+  });
+
+  switchButton.addEventListener('change', () => {
+    const isDark = switchButton.checked;
+    chrome.storage.local.set({ isDark });
+    setTheme(isDark);
+  });
+
+  clearBtn.addEventListener('click', () => {
+    chrome.storage.local.remove('orderDetails');
+    chrome.storage.local.set({ isAnalyzed: false });
+    window.close();
+  });
+
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const tab = tabs?.[0];
+    if (!tab || !tab.url) {
+      notOnOrdersCard.style.display = 'block';
+      return;
     }
 
-    chrome.storage.local.get("isDark", (resp) => {
-        setTheme(resp.isDark);
-    });
+    if (onOrdersTab(tab.url)) {
+      analyzeBtn.style.display = 'inline-flex';
 
-    switchButton.addEventListener("change", () => {
-        const isDark = switchButton.checked;
-        chrome.storage.local.set({ isDark });
-        setTheme(isDark);
-    });
+      chrome.storage.local.get('isAnalyzed', (resp) => {
+        analyzeLabel.textContent = resp.isAnalyzed ? 'Re-analyze' : 'Analyze';
+      });
 
-    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-        const tab = tabs[0];
-        if (tab.url.includes('flipkart') && tab.url.includes('orders')) {
-            const analyzeBtn = document.getElementById("analyze_btn");
-            chrome.storage.local.get('isAnalyzed', (resp) =>{
-                analyzeBtn.innerHTML += resp.isAnalyzed ? 'Re-analyze' : 'Analyze';
-            })
-            analyzeBtn.style.display = "block";
+      chrome.storage.local.get('orderDetails', (resp) => {
+        showOrdersDetail(resp.orderDetails);
+      });
 
-            analyzeBtn.addEventListener("click", () => {
-                document.getElementById("requistie").style.display  = "block";
-                chrome.storage.local.set({ isAnalyzed: true })
-                analyzeBtn.style.display = "none";
-                chrome.tabs.sendMessage(
-                    tab.id,
-                    { from: "popup", query: "clicked" } 
-                );
-                chrome.storage.local.remove("orderDetails");
-                updateOrdersDetails()
+      analyzeBtn.addEventListener('click', () => {
+        loadingCard.style.display = 'block';
+        analyzeBtn.style.display = 'none';
+        chrome.storage.local.set({ isAnalyzed: true });
+        chrome.storage.local.remove('orderDetails');
 
+        chrome.tabs.sendMessage(tab.id, { from: 'popup', query: 'clicked' });
+        updateOrdersDetails();
+      });
+    } else {
+      notOnOrdersCard.style.display = 'block';
+      ordersCard.style.display = 'none';
 
-            });
-        }else {
-            const errorMsg = document.getElementById("flipkart-order-button");
-            errorMsg.style.display = "block";
-            document.getElementById("orders-data").style.display = "none";
-            flikartOderButton.addEventListener("click", () => {
-
-                window.open("https://www.flipkart.com/account/login?ret=%2Faccount%2Forders%3Flink%3Dhome_orders&fromMyOrdersPage=true")
-
-            })
-        }
-
-    });
-
-
-    function showOrdersDetail(orderDetails) {
-        if (orderDetails) {
-
-            if (orderDetails.length > 0) {
-                let i = 0;
-                orderDetails.forEach(data => {
-                    resultList[i].innerText = data;
-                    i++;
-                });
-                if (!document.getElementById("clearBtn")) {
-                    const ClearButton = document.getElementById("clear_btn");
-                    ClearButton.style.display = "block"
-
-                    ClearButton.addEventListener("click", () => {
-                        chrome.storage.local.remove("orderDetails");
-                        chrome.storage.local.set({ isAnalyzed: false })
-                        window.close();
-                    });
-
-                }
-                document.getElementById("orders-data").style.display = "block";
-                document.getElementById("requistie").style.display = "none";
-            }
-            const amount_spent = document.getElementById("amount-spent");
-            let format = new Intl.NumberFormat('en-IN', {
-                style: 'currency',
-                currency: 'INR',
-                minimumFractionDigits: 2,
-            });
-            amount_spent.innerText = (format.format(amount_spent.innerText));
-        }
+      flipkartOrderButton.addEventListener('click', () => {
+        window.open('https://www.flipkart.com/account/login?ret=%2Faccount%2Forders%3Flink%3Dhome_orders&fromMyOrdersPage=true');
+      });
     }
-
-    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-        const tab = tabs[0];
-        if (tab.url.includes('flipkart') && tab.url.includes('orders')) {
-
-            chrome.storage.local.get("orderDetails", (resp) => {
-                const orderDetails = resp.orderDetails;
-                showOrdersDetail(orderDetails);
-            });
-        }
-    })
-    function updateOrdersDetails() {
-        var intervalId = setInterval(() => {
-            chrome.storage.local.get("orderDetails", (resp) => {
-                const orderDetails = resp.orderDetails;
-                if (orderDetails) {
-                    if (orderDetails.length > 0) {
-                        showOrdersDetail(orderDetails);
-                        clearInterval(intervalId);
-                    }
-                }
-            });
-
-        }, 100)
-    }
-
-
-    document.querySelectorAll('input[type=radio]').forEach(function (radio) {
-        radio.addEventListener('change', function () {
-
-            if (this.value > 2) {
-
-                window.open("https://chromewebstore.google.com/detail/flipkart-order-analyzer/mcpflafdobpbfojllbpbciphhgknnjje?authuser=0&hl=en-GB/reviews",)
-            } else {
-                window.open("https://docs.google.com/forms/d/e/1FAIpQLSd2vkK1K6qdWe16u-oeez4iT-xsjvOqv2ipLw-amJ_KOcHUtQ/viewform")
-            }
-        });
-    });
-
-
+  });
 });

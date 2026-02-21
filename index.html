@@ -2,101 +2,69 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flipkart Analyzer</title>
-
-    <link id="pagestyle" rel="stylesheet" href="./styleSheets/style.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flipkart Order Analyzer</title>
+  <link id="pagestyle" rel="stylesheet" href="./styleSheets/style.css">
 </head>
 
 <body>
-    <div id="container">
-        <header>
-            <div class="header_heading">
-                <div>
-                    <img class="header_icon" src="./assets/cart_icon.png" alt="icon">
-                    <h1 class="header_name">Orders Analyzer</h1>
-                </div>
-                <div>
-                    <div class="switch js-switch">
-                        <input type="checkbox" class="switch__checkbox js-switch__checkbox" id="switch__checkbox">
-                        <label class="switch__slider" for="switch__checkbox"></label>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="header_description">
-                <p>Analyze your Flipkart orders easily. Just go to the orders section and click "Analyze" for insights
-                    into your purchase history</p>
-            </div>
-        </header>
-        <div id="flipkart-order-button">
-
-            <div>Click "Flipkart orders" to open Flipkart orders section</div>
-            <button id="flikart-button-Id" class="button-17">Flipkart Orders</button>
-
-
-
+  <div id="container">
+    <header class="app-header">
+      <div class="header_heading">
+        <div class="title-wrap">
+          <img class="header_icon" src="./assets/cart_icon.png" alt="Flipkart cart icon">
+          <h1 class="header_name">Order Analyzer</h1>
         </div>
-
-
-        <div id="mainCont">
-
-            <div id="requistie">
-                <div class="lds-ripple">
-                    <div></div>
-                    <div></div>
-                </div>
-                <div>loading older orders, please donot switch or close window</div>
-            </div>
-            <div id="orders-data">
-                <div id="subCont">
-
-                    <div class="result-div ">Total Order: <span class=result></span></div>
-                    <div class="result-div ">Cancelled: <span class=result></span> </div>
-                    <div class="result-div ">Delivered: <span class=result></span></div>
-                    <div class="result-div ">Returned: <span class=result></span></div>
-
-                </div>
-                <div class="total-spent">
-                    <div style="text-align: center;">Total Money Spent</div>
-                    <div style="text-align: center;"><span id="amount-spent" class=result></span></div>
-                </div></span>
-            </div>
+        <div class="switch js-switch" aria-label="Theme toggle">
+          <input type="checkbox" class="switch__checkbox js-switch__checkbox" id="switch__checkbox">
+          <label class="switch__slider" for="switch__checkbox"></label>
         </div>
+      </div>
+      <p class="header_description">Open your Flipkart Orders page and run analysis to view a quick summary of your order lifecycle and total spend.</p>
+    </header>
 
-    </div>
+    <section id="flipkart-order-button" class="card">
+      <div>You're not on the Flipkart orders page yet.</div>
+      <button id="flikart-button-Id" class="button-17">Open Flipkart Orders</button>
+    </section>
+
+    <main id="mainCont">
+      <div id="requistie" class="card">
+        <div class="lds-ripple"><div></div><div></div></div>
+        <div>Loading older orders. Please keep this tab open.</div>
+      </div>
+
+      <section id="orders-data" class="card">
+        <div id="subCont">
+          <div class="result-div">Total Orders: <span class="result"></span></div>
+          <div class="result-div">Cancelled: <span class="result"></span></div>
+          <div class="result-div">Delivered: <span class="result"></span></div>
+          <div class="result-div">Returned: <span class="result"></span></div>
+        </div>
+        <div class="total-spent">
+          <div>Total Money Spent</div>
+          <div><span id="amount-spent" class="result"></span></div>
+        </div>
+      </section>
+    </main>
 
     <div class="buttons-div">
-        <button class="button-17" id="analyze_btn"><img class="button-svgs" src="./assets/analyze.png"
-                alt=""></button>
-        <button class="button-17" id="clear_btn"><img class="button-svgs" src="./assets/reset.png" alt="">Clear</button>
-
+      <button class="button-17" id="analyze_btn"><img class="button-svgs" src="./assets/analyze.png" alt="Analyze icon"><span id="analyze_label">Analyze</span></button>
+      <button class="button-17" id="clear_btn"><img class="button-svgs" src="./assets/reset.png" alt="Reset icon">Reset</button>
     </div>
-    <div class="footer">
 
+    <footer class="footer">
+      <div class="feedback-links">
+        <a class="feedback-link" target="_blank" rel="noopener noreferrer" href="https://chromewebstore.google.com/detail/flipkart-order-analyzer/mcpflafdobpbfojllbpbciphhgknnjje/reviews">Rate on Chrome Web Store</a>
+        <a class="feedback-link" target="_blank" rel="noopener noreferrer" href="https://docs.google.com/forms/d/e/1FAIpQLSd2vkK1K6qdWe16u-oeez4iT-xsjvOqv2ipLw-amJ_KOcHUtQ/viewform">Share Feedback</a>
+      </div>
+      <div class="footer-credit">Made with <span class="footer__heart js-heart">♥</span> by Manish Shivhare</div>
+    </footer>
+  </div>
 
-        <div class="rate-link">
-
-            <span class="star-rating">
-
-                <input type="radio" name="rating" value="1"><i></i>
-                <input type="radio" name="rating" value="2"><i></i>
-                <input type="radio" name="rating" value="3"><i></i>
-                <input type="radio" name="rating" value="4"><i></i>
-                <input type="radio" name="rating" value="5"><i></i>
-
-            </span>
-
-
-        </div>
-
-        <div>Made with<span class="footer__heart js-heart">♥</span>by Manish Shivhare</span></div>
-    </div>
-    </div>
+  <script src="popup.js"></script>
 </body>
-<script src="popup.js"></script>
 
 </html>
