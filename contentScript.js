@@ -2,26 +2,20 @@ const container = document.getElementById("container");
 let shouldStopAnalyzing = false;
 let scrollTimeoutId = null;
 
+// ── Blur Helpers ──────────────────────────────────────────────────────────────
 function applyFilter() {
-  if (container) {
-    container.style.cssText = "filter: blur(5px)";
-  }
+  if (container) container.style.filter = "blur(5px)";
 }
 
 function removeFilter() {
-  if (container) {
-    container.style.cssText = "filter: blur(0px)";
-  }
+  if (container) container.style.filter = "";
 }
 
+// ── Main Analysis ─────────────────────────────────────────────────────────────
 function analyzeContent() {
   shouldStopAnalyzing = false;
-  let endButton = "";
-  const totalDeliveredValue = 4;
-  const cancelledOrder = 1;
-  const returnedOrder = 3;
-  const deliveredOrder = 2;
-  const totalOrder = 0;
+
+  const INDEX = { total: 0, cancelled: 1, delivered: 2, returned: 3, totalSpent: 4 };
   const orderDetails = [0, 0, 0, 0, 0];
 
   function startAnalyzing() {
@@ -31,42 +25,34 @@ function analyzeContent() {
       return;
     }
 
-    const elementsStatusArray = Array.from(
-      document.getElementsByClassName("sNKed5"),
-    );
-    const elementsPriceArray = Array.from(
-      document.getElementsByClassName("QF9IHY"),
-    );
+    const statusElements = Array.from(document.getElementsByClassName("sNKed5"));
+    const priceElements = Array.from(document.getElementsByClassName("QF9IHY"));
 
-    for (let i = 0; i < elementsStatusArray.length; i += 1) {
-      const priceText = elementsPriceArray[i]?.innerText || "";
-      const refundStatus = elementsStatusArray[i].innerText;
+    for (let i = 0; i < statusElements.length; i++) {
+      const refundStatus = statusElements[i].innerText.trim();
       const orderStatus = refundStatus.split(" ")[0];
+      const priceText = priceElements[i]?.innerText || "";
 
       if (refundStatus === "Refund Completed") {
-        orderDetails[returnedOrder] += 1;
+        orderDetails[INDEX.returned]++;
       } else if (orderStatus === "Cancelled") {
-        orderDetails[cancelledOrder] += 1;
-      } else if (
-        orderStatus === "Delivered" ||
-        refundStatus === "Refund Rejected"
-      ) {
+        orderDetails[INDEX.cancelled]++;
+      } else if (orderStatus === "Delivered" || refundStatus === "Refund Rejected") {
         const digits = priceText.replace(/[^0-9]/g, "");
-        const price = Number.parseInt(digits, 10);
-
-        if (!Number.isNaN(price)) {
-          orderDetails[deliveredOrder] += 1;
-          orderDetails[totalDeliveredValue] += price;
+        const price = parseInt(digits, 10);
+        if (!isNaN(price)) {
+          orderDetails[INDEX.delivered]++;
+          orderDetails[INDEX.totalSpent] += price;
         }
       }
     }
 
-    orderDetails[totalOrder] =
-      orderDetails[returnedOrder] +
-      orderDetails[cancelledOrder] +
-      orderDetails[deliveredOrder];
-    chrome.storage.local.set({ orderDetails });
-    chrome.storage.local.set({ isAnalyzing: false });
+    orderDetails[INDEX.total] =
+      orderDetails[INDEX.returned] +
+      orderDetails[INDEX.cancelled] +
+      orderDetails[INDEX.delivered];
+
+    chrome.storage.local.set({ orderDetails, isAnalyzing: false });
     removeFilter();
   }
 
@@ -77,29 +63,29 @@ function analyzeContent() {
       return;
     }
 
-    const endButtonElement = document.querySelector(".dDeuVV");
-    if (endButtonElement) {
-      endButton = endButtonElement.innerText;
-    }
+    const endButtonEl = document.querySelector(".dDeuVV");
+    const endButtonText = endButtonEl?.innerText?.trim() || "";
 
-    if (endButton !== "No More Results To Display") {
-      const showMoreButton = document.querySelector(".dDeuVV");
-      if (showMoreButton && showMoreButton.innerText === "Show More Orders") {
-        showMoreButton.click();
-      }
-
-      window.scrollTo(0, document.body.scrollHeight);
-      scrollTimeoutId = setTimeout(checkNextScroll, 1000);
-    } else {
+    if (endButtonText === "No More Results To Display") {
       startAnalyzing();
+      return;
     }
+
+    if (endButtonText === "Show More Orders") {
+      endButtonEl.click();
+    }
+
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    scrollTimeoutId = setTimeout(checkNextScroll, 1200);
   }
 
   checkNextScroll();
 }
 
+// ── Message Listener ──────────────────────────────────────────────────────────
 chrome.runtime.onMessage.addListener((message) => {
   const { from, query } = message;
+
   if (from === "popup" && query === "clicked") {
     applyFilter();
     analyzeContent();
@@ -111,7 +97,6 @@ chrome.runtime.onMessage.addListener((message) => {
       clearTimeout(scrollTimeoutId);
       scrollTimeoutId = null;
     }
-
     chrome.storage.local.set({ isAnalyzing: false });
     removeFilter();
   }

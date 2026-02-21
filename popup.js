@@ -10,55 +10,88 @@ window.addEventListener('DOMContentLoaded', () => {
   const ordersCard = document.getElementById('orders-data');
   const notOnOrdersCard = document.getElementById('flipkart-order-button');
 
+  // ── Theme ──────────────────────────────────────────────────────────────────
   const setTheme = (isDark = false) => {
     const theme = isDark ? 'styleSheets/dark-style.css' : 'styleSheets/style.css';
     document.getElementById('pagestyle').setAttribute('href', `./${theme}`);
     switchButton.checked = isDark;
   };
 
-  const onOrdersTab = (url = '') => url.includes('flipkart.com') && url.includes('orders');
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  const onOrdersTab = (url = '') =>
+    url.includes('flipkart.com') && url.includes('orders');
 
-  const formatCurrency = (value) => new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    minimumFractionDigits: 2
-  }).format(Number(value || 0));
+  const formatCurrency = (value) =>
+    new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(Number(value || 0));
 
+  const show = (el, displayType = 'block') => { if (el) el.style.display = displayType; };
+  const hide = (el) => { if (el) el.style.display = 'none'; };
+
+  // ── Display Results ────────────────────────────────────────────────────────
   const showOrdersDetail = (orderDetails) => {
     if (!orderDetails || orderDetails.length < 5) return;
 
-    resultList[0].innerText = orderDetails[0] ?? 0;
-    resultList[1].innerText = orderDetails[1] ?? 0;
-    resultList[2].innerText = orderDetails[2] ?? 0;
-    resultList[3].innerText = orderDetails[3] ?? 0;
-    document.getElementById('amount-spent').innerText = formatCurrency(orderDetails[4]);
+    // Animate count-up for numbers
+    const animateValue = (el, end) => {
+      if (!el) return;
+      let start = 0;
+      const duration = 600;
+      const step = (timestamp) => {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        el.textContent = Math.round(eased * end);
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = end;
+      };
+      requestAnimationFrame(step);
+    };
 
-    ordersCard.style.display = 'block';
-    loadingCard.style.display = 'none';
-    clearBtn.style.display = 'block';
-    stopBtn.style.display = 'none';
-    analyzeBtn.style.display = 'inline-flex';
+    animateValue(resultList[0], orderDetails[0] ?? 0);
+    animateValue(resultList[1], orderDetails[1] ?? 0);
+    animateValue(resultList[2], orderDetails[2] ?? 0);
+    animateValue(resultList[3], orderDetails[3] ?? 0);
+
+    const amountEl = document.getElementById('amount-spent');
+    if (amountEl) amountEl.textContent = formatCurrency(orderDetails[4]);
+
+    show(ordersCard, 'block');
+    hide(loadingCard);
+    show(clearBtn, 'inline-flex');
+    hide(stopBtn);
+    show(analyzeBtn, 'inline-flex');
   };
 
+  // ── Analyzing State ────────────────────────────────────────────────────────
   const setAnalyzingState = (isAnalyzing) => {
-    loadingCard.style.display = isAnalyzing ? 'block' : 'none';
+    loadingCard.style.display = isAnalyzing ? 'flex' : 'none';
     analyzeBtn.style.display = isAnalyzing ? 'none' : 'inline-flex';
     stopBtn.style.display = isAnalyzing ? 'inline-flex' : 'none';
   };
 
+  // ── Poll for Results ───────────────────────────────────────────────────────
   const updateOrdersDetails = () => {
     const intervalId = setInterval(() => {
       chrome.storage.local.get('orderDetails', (resp) => {
-        const orderDetails = resp.orderDetails;
+        const { orderDetails } = resp;
         if (Array.isArray(orderDetails) && orderDetails.length > 0) {
           showOrdersDetail(orderDetails);
           chrome.storage.local.set({ isAnalyzing: false });
           clearInterval(intervalId);
         }
       });
-    }, 200);
+    }, 300);
+
+    // Safety timeout: stop polling after 10 min
+    setTimeout(() => clearInterval(intervalId), 600_000);
   };
 
+  // ── Init Theme ─────────────────────────────────────────────────────────────
   chrome.storage.local.get('isDark', (resp) => {
     setTheme(Boolean(resp.isDark));
   });
@@ -69,21 +102,24 @@ window.addEventListener('DOMContentLoaded', () => {
     setTheme(isDark);
   });
 
+  // ── Clear / Reset ──────────────────────────────────────────────────────────
   clearBtn.addEventListener('click', () => {
     chrome.storage.local.remove('orderDetails');
     chrome.storage.local.set({ isAnalyzed: false, isAnalyzing: false });
     window.close();
   });
 
+  // ── Main Tab Check ─────────────────────────────────────────────────────────
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const tab = tabs?.[0];
-    if (!tab || !tab.url) {
-      notOnOrdersCard.style.display = 'block';
+
+    if (!tab?.url) {
+      show(notOnOrdersCard, 'flex');
       return;
     }
 
     if (onOrdersTab(tab.url)) {
-      analyzeBtn.style.display = 'inline-flex';
+      show(analyzeBtn, 'inline-flex');
 
       chrome.storage.local.get('isAnalyzed', (resp) => {
         analyzeLabel.textContent = resp.isAnalyzed ? 'Re-analyze' : 'Analyze';
@@ -94,14 +130,14 @@ window.addEventListener('DOMContentLoaded', () => {
       });
 
       chrome.storage.local.get('orderDetails', (resp) => {
-        showOrdersDetail(resp.orderDetails);
+        if (resp.orderDetails) showOrdersDetail(resp.orderDetails);
       });
 
       analyzeBtn.addEventListener('click', () => {
+        analyzeLabel.textContent = 'Analyzing…';
         setAnalyzingState(true);
         chrome.storage.local.set({ isAnalyzed: true, isAnalyzing: true });
         chrome.storage.local.remove('orderDetails');
-
         chrome.tabs.sendMessage(tab.id, { from: 'popup', query: 'clicked' });
         updateOrdersDetails();
       });
@@ -112,8 +148,8 @@ window.addEventListener('DOMContentLoaded', () => {
         setAnalyzingState(false);
       });
     } else {
-      notOnOrdersCard.style.display = 'block';
-      ordersCard.style.display = 'none';
+      show(notOnOrdersCard, 'flex');
+      hide(ordersCard);
 
       flipkartOrderButton.addEventListener('click', () => {
         window.open('https://www.flipkart.com/account/login?ret=%2Faccount%2Forders%3Flink%3Dhome_orders&fromMyOrdersPage=true');

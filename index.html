@@ -6,63 +6,109 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Flipkart Order Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link id="pagestyle" rel="stylesheet" href="./styleSheets/style.css">
 </head>
 
 <body>
   <div id="container">
+
     <header class="app-header">
       <div class="header_heading">
         <div class="title-wrap">
-          <img class="header_icon" src="./assets/cart_icon.png" alt="Flipkart cart icon">
-          <h1 class="header_name">Order Analyzer</h1>
+          <div class="logo-badge">
+            <img class="header_icon" src="./assets/cart_icon.png" alt="Flipkart cart icon">
+          </div>
+          <div class="title-text">
+            <h1 class="header_name">Order Analyzer</h1>
+            <span class="header_sub">Flipkart</span>
+          </div>
         </div>
         <div class="switch js-switch" aria-label="Theme toggle">
           <input type="checkbox" class="switch__checkbox js-switch__checkbox" id="switch__checkbox">
-          <label class="switch__slider" for="switch__checkbox"></label>
+          <label class="switch__slider" for="switch__checkbox">
+            <span class="switch__icon switch__icon--light">☀</span>
+            <span class="switch__icon switch__icon--dark">☾</span>
+          </label>
         </div>
       </div>
-      <p class="header_description">Open your Flipkart Orders page and run analysis to view a quick summary of your order lifecycle and total spend.</p>
+      <p class="header_description">Open your Flipkart Orders page and run analysis to see a complete breakdown of your order history and total spend.</p>
     </header>
 
-    <section id="flipkart-order-button" class="card">
-      <div>You're not on the Flipkart orders page yet.</div>
-      <button id="flikart-button-Id" class="button-17">Open Flipkart Orders</button>
+    <section id="flipkart-order-button" class="card card--cta">
+      <div class="cta-icon">🛒</div>
+      <div class="cta-text">You're not on the Flipkart orders page yet</div>
+      <button id="flikart-button-Id" class="btn btn--primary">Open Flipkart Orders →</button>
     </section>
 
     <main id="mainCont">
-      <div id="requistie" class="card">
-        <div class="lds-ripple"><div></div><div></div></div>
-        <div>Loading older orders. Please keep this tab open.</div>
+      <div id="requistie" class="card card--loading">
+        <div class="loading-visual">
+          <div class="lds-ripple"><div></div><div></div></div>
+        </div>
+        <div class="loading-text">
+          <div class="loading-title">Analyzing your orders</div>
+          <div class="loading-sub">Scrolling through your history — please keep this tab open</div>
+        </div>
       </div>
 
-      <section id="orders-data" class="card">
+      <section id="orders-data" class="card card--results">
         <div id="subCont">
-          <div class="result-div">Total Orders: <span class="result"></span></div>
-          <div class="result-div">Cancelled: <span class="result"></span></div>
-          <div class="result-div">Delivered: <span class="result"></span></div>
-          <div class="result-div">Returned: <span class="result"></span></div>
+          <div class="result-row">
+            <span class="result-label">
+              <span class="result-dot result-dot--total"></span>Total Orders
+            </span>
+            <span class="result badge-result"></span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">
+              <span class="result-dot result-dot--cancelled"></span>Cancelled
+            </span>
+            <span class="result badge-result"></span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">
+              <span class="result-dot result-dot--delivered"></span>Delivered
+            </span>
+            <span class="result badge-result"></span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">
+              <span class="result-dot result-dot--returned"></span>Returned
+            </span>
+            <span class="result badge-result"></span>
+          </div>
         </div>
         <div class="total-spent">
-          <div>Total Money Spent</div>
-          <div><span id="amount-spent" class="result"></span></div>
+          <div class="total-spent__label">Total Spent</div>
+          <div class="total-spent__amount"><span id="amount-spent" class="result"></span></div>
         </div>
       </section>
     </main>
 
     <div class="buttons-div">
-      <button class="button-17" id="analyze_btn"><img class="button-svgs" src="./assets/analyze.png" alt="Analyze icon"><span id="analyze_label">Analyze</span></button>
-      <button class="button-17" id="stop_btn">Stop Analyzing</button>
-      <button class="button-17" id="clear_btn"><img class="button-svgs" src="./assets/reset.png" alt="Reset icon">Reset</button>
+      <button class="btn btn--action" id="analyze_btn">
+        <img class="button-svgs" src="./assets/analyze.png" alt="Analyze icon">
+        <span id="analyze_label">Analyze</span>
+      </button>
+      <button class="btn btn--stop" id="stop_btn">
+        <span class="stop-dot"></span>Stop
+      </button>
+      <button class="btn btn--ghost" id="clear_btn">
+        <img class="button-svgs" src="./assets/reset.png" alt="Reset icon">Reset
+      </button>
     </div>
 
     <footer class="footer">
       <div class="feedback-links">
-        <a class="feedback-link" target="_blank" rel="noopener noreferrer" href="https://chromewebstore.google.com/detail/flipkart-order-analyzer/mcpflafdobpbfojllbpbciphhgknnjje/reviews">Rate on Chrome Web Store</a>
-        <a class="feedback-link" target="_blank" rel="noopener noreferrer" href="https://docs.google.com/forms/d/e/1FAIpQLSd2vkK1K6qdWe16u-oeez4iT-xsjvOqv2ipLw-amJ_KOcHUtQ/viewform">Share Feedback</a>
+        <a class="feedback-link" target="_blank" rel="noopener noreferrer" href="https://chromewebstore.google.com/detail/flipkart-order-analyzer/mcpflafdobpbfojllbpbciphhgknnjje/reviews">★ Rate Extension</a>
+        <a class="feedback-link" target="_blank" rel="noopener noreferrer" href="https://docs.google.com/forms/d/e/1FAIpQLSd2vkK1K6qdWe16u-oeez4iT-xsjvOqv2ipLw-amJ_KOcHUtQ/viewform">Feedback</a>
       </div>
       <div class="footer-credit">Made with <span class="footer__heart js-heart">♥</span> by Manish Shivhare</div>
     </footer>
+
   </div>
 
   <script src="popup.js"></script>
