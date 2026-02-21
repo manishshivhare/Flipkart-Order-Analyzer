@@ -4,12 +4,12 @@
   "version": "2.0.0",
   "manifest_version": 3,
   "action": {
-    "default_popup": "./index.html",
-    "default_icon": "./assets/logo.png"
+    "default_popup": "index.html",
+    "default_icon": "assets/logo.png"
   },
   "icons": {
-    "48": "./assets/logo.png",
-    "128": "./assets/logo.png"
+    "48": "assets/logo.png",
+    "128": "assets/logo.png"
   },
   "content_scripts": [
     {
@@ -18,7 +18,7 @@
         "https://www.flipkart.com/account/*orders*"
       ],
       "js": [
-        "./contentScript.js"
+        "contentScript.js"
       ]
     }
   ],
